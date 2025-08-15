@@ -46,4 +46,5 @@ const Config = {
 };
 
 // Make Config globally available
-window.NomosConfig = Config;
+window.NomosConfig.setBackendURL('https://55245468afb0.ngrok-free.app');
+
