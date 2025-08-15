@@ -1,8 +1,9 @@
-// NOMOS AI Frontend Client
+// NOMOS AI Frontend Client - Updated for hybrid deployment
 class NomosAIClient {
   constructor() {
-    this.baseURL = 'http://localhost:3001';
-    this.currentModel = 'ollama'; // Default to Ollama
+    // Use the configuration system
+    this.baseURL = window.NomosConfig ? window.NomosConfig.getBackendURL() : 'http://localhost:3001';
+    this.currentModel = 'ollama';
     this.selectedOllamaModel = 'llama3.2';
   }
 
@@ -39,7 +40,9 @@ class NomosAIClient {
       return data;
     } catch (error) {
       console.error('Error sending chat:', error);
-      return { error: 'Failed to get response' };
+      return { 
+        error: 'Failed to connect to backend. Please check if your local server is running and ngrok is active.' 
+      };
     }
   }
 
@@ -73,7 +76,7 @@ class NomosAIClient {
       
     } catch (error) {
       console.error('Error streaming chat:', error);
-      if (onChunk) onChunk('Error: Failed to get response');
+      if (onChunk) onChunk('Error: Failed to connect to backend');
     }
   }
 
@@ -82,6 +85,14 @@ class NomosAIClient {
     this.currentModel = provider;
     if (provider === 'ollama' && model) {
       this.selectedOllamaModel = model;
+    }
+  }
+
+  // Update backend URL
+  updateBackendURL(url) {
+    this.baseURL = url;
+    if (window.NomosConfig) {
+      window.NomosConfig.setBackendURL(url);
     }
   }
 }
