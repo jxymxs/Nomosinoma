@@ -2,7 +2,7 @@
 class NomosAIClient {
   constructor() {
     // Use the configuration system
-    this.baseURL = window.NomosConfig ? window.NomosConfig.getBackendURL() : 'http://localhost:3001';
+    this.baseURL = window.NomosConfig ? window.NomosConfig.getBackendURL() : 'https://55245468afb0.ngrok-free.app';
     this.currentModel = 'ollama';
     this.selectedOllamaModel = 'llama3.2';
   }
