@@ -242,7 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check server health
     async function checkServerHealth() {
         try {
-            const response = await fetch('http://localhost:3001/api/health');
+            // Use the configured backend URL from the client
+            const backendURL = client.baseURL;
+            const response = await fetch(`${backendURL}/api/health`);
             const data = await response.json();
             
             if (data.status === 'ok') {
@@ -257,6 +259,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Server health check failed:', error);
             statusIndicator.innerHTML = '<i class="fas fa-circle"></i> Connection Failed';
             statusIndicator.className = 'status-indicator disconnected';
+            
+            // Show configuration prompt for ngrok URL
+            if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                const ngrokUrl = prompt('Enter your ngrok URL (e.g., https://123456.ngrok-free.app):');
+                if (ngrokUrl) {
+                    client.updateBackendURL(ngrokUrl);
+                    checkServerHealth(); // Retry with new URL
+                }
+            }
         }
     }
 

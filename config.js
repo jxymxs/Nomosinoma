@@ -14,15 +14,21 @@ const Config = {
             return 'http://localhost:3001';
         }
         
-        // For production, use current origin or prompt user
+        // For production (Netlify), prompt user for ngrok URL
+        const ngrokUrl = prompt('Please enter your ngrok URL (e.g., https://123456.ngrok-free.app):');
+        if (ngrokUrl && ngrokUrl.startsWith('https://')) {
+            return ngrokUrl.replace(/\/$/, ''); // Remove trailing slash
+        }
+        
+        // Fallback to current origin
         return window.location.origin;
     })(),
 
     // Method to update backend URL
     setBackendURL: function(url) {
-        this.backendURL = url;
-        localStorage.setItem('nomos-backend-url', url);
-        console.log('Backend URL updated to:', url);
+        this.backendURL = url.replace(/\/$/, ''); // Remove trailing slash
+        localStorage.setItem('nomos-backend-url', this.backendURL);
+        console.log('Backend URL updated to:', this.backendURL);
     },
 
     // Get current backend URL
@@ -33,18 +39,22 @@ const Config = {
     // Check if backend is accessible
     checkBackend: async function() {
         try {
-            const response = await fetch(`${this.backendURL}/api/health`);
+            const response = await fetch(`${this.backendURL}/api/health`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
             const data = await response.json();
             return { success: true, data };
         } catch (error) {
             return { 
                 success: false, 
-                error: 'Cannot connect to backend. Please ensure your local server is running and ngrok is active.' 
+                error: 'Cannot connect to backend. Please ensure your local server is running and ngrok is active. URL: ' + this.backendURL
             };
         }
     }
 };
 
 // Make Config globally available
-window.NomosConfig.setBackendURL('https://55245468afb0.ngrok-free.app');
-
+window.NomosConfig = Config;
