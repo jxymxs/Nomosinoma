@@ -2,22 +2,29 @@
 class NomosAIClient {
   constructor() {
     // Use the configuration system
-    this.baseURL = window.NomosConfig ? window.NomosConfig.getBackendURL() : 'https://55245468afb0.ngrok-free.app';
+    this.baseURL = window.NomosConfig ? window.NomosConfig.getBackendURL() : 'https://854fa5157fe9.ngrok-free.app/';
     this.currentModel = 'ollama';
     this.selectedOllamaModel = 'llama3.2';
   }
 
-  // Get available models
-  async getModels() {
-    try {
-      const response = await fetch(`${this.baseURL}/api/models`);
-      const data = await response.json();
-      return data.models || [];
-    } catch (error) {
-      console.error('Error fetching models:', error);
-      return [];
+    // Get available models
+    async getModels() {
+        try {
+            const response = await fetch(`${this.baseURL}/api/models`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                credentials: 'include'
+            });
+            const data = await response.json();
+            return data.models || [];
+        } catch (error) {
+            console.error('Error fetching models:', error);
+            return [];
+        }
     }
-  }
 
   // Send chat request
   async sendChat(prompt, model = null, provider = null) {
