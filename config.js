@@ -2,40 +2,21 @@
 
 // Configuration object
 const Config = {
-    // Backend URL - can be updated dynamically
-    backendURL: (() => {
-        // Check for stored URL first
-        const stored = localStorage.getItem('nomos-backend-url');
-        if (stored) return stored;
-        
-        // Check if running locally
-        if (window.location.hostname === 'localhost' || 
-            window.location.hostname === '127.0.0.1') {
-            return 'http://localhost:3001';
-        }
-        
-        // For production (Netlify), prompt user for ngrok URL
-        const ngrokUrl = prompt('Please enter your ngrok URL (e.g., https://123456.ngrok-free.app):');
-        if (ngrokUrl && ngrokUrl.startsWith('https://')) {
-            return ngrokUrl.replace(/\/$/, ''); // Remove trailing slash
-        }
-        
-        // Fallback to current origin
-        return window.location.origin;
-    })(),
-
-    // Method to update backend URL
+    // Backend URL - hardcoded ngrok URL for production
+    backendURL: 'https://854fa5157fe9.ngrok-free.app',
+    
+    // Method to update backend URL (for dynamic updates if needed)
     setBackendURL: function(url) {
         this.backendURL = url.replace(/\/$/, ''); // Remove trailing slash
         localStorage.setItem('nomos-backend-url', this.backendURL);
         console.log('Backend URL updated to:', this.backendURL);
     },
-
+    
     // Get current backend URL
     getBackendURL: function() {
         return this.backendURL;
     },
-
+    
     // Check if backend is accessible
     checkBackend: async function() {
         try {
