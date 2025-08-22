@@ -3,7 +3,7 @@
 // Configuration object
 const Config = {
     // Backend URL - hardcoded ngrok URL for production
-    backendURL: 'https://854fa5157fe9.ngrok-free.app',
+    backendURL: 'https://f68d23c0db40.ngrok-free.app',
     
     // Method to update backend URL (for dynamic updates if needed)
     setBackendURL: function(url) {
