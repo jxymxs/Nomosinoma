@@ -2,8 +2,8 @@
 
 // Configuration object
 const Config = {
-    // Backend URL - hardcoded ngrok URL for production
-    backendURL: 'https://f68d23c0db40.ngrok-free.app',
+    // Backend URL - localhost for local development, ngrok for production
+    backendURL: 'http://localhost:3001',
     
     // Method to update backend URL (for dynamic updates if needed)
     setBackendURL: function(url) {
